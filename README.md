@@ -5,20 +5,6 @@
 
 *ATTENTION: Always source the file `set_env.sh` to update your PATH, etc.*
 
-## initramfs
-To create this, do the following:
-```
-mkdir initramfs
-cd initramfs
-mkdir -p {bin,sbin,dev,etc,home,mnt,proc,sys,usr,tmp}
-mkdir -p usr/{bin,sbin}
-mkdir -p proc/sys/kernel
-cd dev
-sudo mknod sda b 8 0 
-sudo mknod console c 5 1
-cd ..
-```
-
 ## Prerequisites
 - For riscv-gnu-toolchain:
   ```
@@ -33,6 +19,59 @@ Run ```make linux```. After a successful build the kernel image will be under `l
 
 ## Busybox
 Run ```make busybox```.
+
+## initramfs
+To create this, do the following:
+```
+mkdir initramfs
+cd initramfs
+mkdir -p {bin,sbin,dev,etc,home,mnt,proc,sys,usr,tmp}
+mkdir -p usr/{bin,sbin}
+mkdir -p proc/sys/kernel
+cd dev
+sudo mknod sda b 8 0 
+sudo mknod console c 5 1
+cd ..
+```
+
+### Copy previously built busybox
+```
+cp ../busybox/busybox ./bin/
+```
+
+### init script
+Create the file ```init``` with the following contents:
+```
+#!/bin/busybox sh
+
+# Make symlinks
+/bin/busybox --install -s
+
+# Mount system
+mount -t devtmpfs  devtmpfs  /dev
+mount -t proc      proc      /proc
+mount -t sysfs     sysfs     /sys
+mount -t tmpfs     tmpfs     /tmp
+
+# Busybox TTY fix
+setsid cttyhack sh
+
+# https://git.busybox.net/busybox/tree/docs/mdev.txt?h=1_32_stable
+echo /sbin/mdev > /proc/sys/kernel/hotplug
+mdev -s
+
+sh
+```
+
+Make it executable:
+```
+chmod +x init
+```
+
+Create the initramfs image:
+```
+find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz
+```
 
 ## QEMU
 TBD

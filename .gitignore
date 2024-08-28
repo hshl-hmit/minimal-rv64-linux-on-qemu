@@ -2,3 +2,4 @@
 riscv-gnu-toolchain.d
 linux.d
 busybox.d
+/initramfs/
