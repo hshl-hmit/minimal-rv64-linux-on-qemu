@@ -16,3 +16,10 @@ linux.d:
 
 .PHONY: linux
 linux: linux.d
+
+busybox.d:
+	cd busybox && make ARCH=riscv CROSS_COMPILE=$(CROSS_PREFIX)- defconfig && echo "CONFIG_STATIC=y" >> .config && make ARCH=riscv CROSS_COMPILE=$(CROSS_PREFIX)- -j $(nproc)
+	touch busybox.d
+
+.PHONY: busybox
+busybox: busybox.d

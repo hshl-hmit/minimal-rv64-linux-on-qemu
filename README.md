@@ -15,7 +15,7 @@ Run `make riscv-gnu-toolchain`.
 Run `make linux`. After a successful build the kernel image will be under `linux/arch/riscv/boot/Image`.
 
 ## Busybox
-TBD
+Run `make busybox`.
 
 ## Root file system
 So far, we only create a minimal initramfs
