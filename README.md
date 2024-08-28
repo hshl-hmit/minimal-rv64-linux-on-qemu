@@ -6,10 +6,23 @@
 > **_ATTENTION:_** Always source the file `set_env.sh` to update your PATH, etc.
 
 ## Prerequisites
-- For riscv-gnu-toolchain:
-  ```
-  sudo apt-get install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
-  ```
+For riscv-gnu-toolchain:
+```
+sudo apt-get install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
+```
+
+For QEMU:
+```
+sudo apt install libslirp-dev
+```
+
+## Clone and initialize this repository
+```
+git clone https://github.com/hshl-hmit/minimal-rv64-linux-on-qemu.git
+
+cd minimal-rv64-linux-on-qemu
+git submodule update --init
+```
 
 ## riscv-gnu-toolchain
 Run ```make riscv-gnu-toolchain```.
@@ -79,15 +92,16 @@ find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz
 Configure the QEMU build:
 ```
 cd qemu
-./configure --target-list=riscv64-softmmu,riscv64-linux-user --enable-slirp
+./configure --target-list=riscv64-softmmu,riscv64-linux-user --enable-slirp --prefix=$(pwd)/../prefix
 ```
 Build and install:
 ```
 make -j $(nproc)
+make install
 ```
 
 ### Simulate what we have built
 In the base folder, do the following to boot our newly built Linux:
 ```
-./qemu/build/qemu-system-riscv64 -nographic -machine virt -kernel linux/arch/riscv/boot/Image -initrd initramfs/initramfs.cpio.gz -append "console=ttyS0" -netdev user,id=net0 -device virtio-net-device,netdev=net0
+qemu-system-riscv64 -nographic -machine virt -kernel linux/arch/riscv/boot/Image -initrd initramfs/initramfs.cpio.gz -append "console=ttyS0" -netdev user,id=net0 -device virtio-net-device,netdev=net0
 ```
