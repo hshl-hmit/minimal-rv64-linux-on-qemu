@@ -3,7 +3,7 @@
 - Linux Kernel Version: v6.10 (latest stable as of today, Aug 28th 2024)
 - Busybox Version: 1_36_stable (same here)
 
-*ATTENTION: Always source the file `set_env.sh` to update your PATH, etc.*
+> **_ATTENTION:_** Always source the file `set_env.sh` to update your PATH, etc.
 
 ## Prerequisites
 - For riscv-gnu-toolchain:
