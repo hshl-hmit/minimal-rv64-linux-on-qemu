@@ -7,3 +7,6 @@
 [submodule "busybox"]
 	path = busybox
 	url = https://git.busybox.net/busybox
+[submodule "qemu"]
+	path = qemu
+	url = https://github.com/qemu/qemu.git
