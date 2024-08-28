@@ -74,4 +74,20 @@ find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz
 ```
 
 ## QEMU
-TBD
+
+### Installation
+Configure the QEMU build:
+```
+cd qemu
+./configure --target-list=riscv64-softmmu,riscv64-linux-user --enable-slirp
+```
+Build and install:
+```
+make -j $(nproc)
+```
+
+### Simulate what we have built
+In the base folder, do the following to boot our newly built Linux:
+```
+./qemu/build/qemu-system-riscv64 -nographic -machine virt -kernel linux/arch/riscv/boot/Image -initrd initramfs/initramfs.cpio.gz -append "console=ttyS0" -netdev user,id=net0 -device virtio-net-device,netdev=net0
+```
