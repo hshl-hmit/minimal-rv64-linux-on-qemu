@@ -5,20 +5,34 @@
 
 *ATTENTION: Always source the file `set_env.sh` to update your PATH, etc.*
 
+## initramfs
+To create this, do the following:
+```
+mkdir initramfs
+cd initramfs
+mkdir -p {bin,sbin,dev,etc,home,mnt,proc,sys,usr,tmp}
+mkdir -p usr/{bin,sbin}
+mkdir -p proc/sys/kernel
+cd dev
+sudo mknod sda b 8 0 
+sudo mknod console c 5 1
+cd ..
+```
+
 ## Prerequisites
-- For riscv-gnu-toolchain: `sudo apt-get install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev`
+- For riscv-gnu-toolchain:
+  ```
+  sudo apt-get install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
+  ```
 
 ## riscv-gnu-toolchain
-Run `make riscv-gnu-toolchain`.
+Run ```make riscv-gnu-toolchain```.
 
 ## Linux Kernel
-Run `make linux`. After a successful build the kernel image will be under `linux/arch/riscv/boot/Image`.
+Run ```make linux```. After a successful build the kernel image will be under `linux/arch/riscv/boot/Image`.
 
 ## Busybox
-Run `make busybox`.
-
-## Root file system
-So far, we only create a minimal initramfs
+Run ```make busybox```.
 
 ## QEMU
 TBD
