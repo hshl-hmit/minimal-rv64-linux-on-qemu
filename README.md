@@ -103,5 +103,5 @@ make install
 ### Simulate what we have built
 In the base folder, do the following to boot our newly built Linux:
 ```
-qemu-system-riscv64 -nographic -machine virt -kernel linux/arch/riscv/boot/Image -initrd initramfs/initramfs.cpio.gz -append "console=ttyS0" -netdev user,id=net0 -device virtio-net-device,netdev=net0
+qemu-system-riscv64 -cpu thead-c906 -nographic -machine virt -kernel linux/arch/riscv/boot/Image -initrd initramfs/initramfs.cpio.gz -append "console=ttyS0" -netdev user,id=net0 -device virtio-net-device,netdev=net0
 ```
